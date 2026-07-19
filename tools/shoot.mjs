@@ -1,4 +1,5 @@
-/* screenshot the live site so i can judge it by eye instead of guessing. */
+/* screenshot the site so the design can be judged by eye instead of guessed at.
+   also fails loudly on page errors and horizontal overflow. */
 import { chromium } from "/home/beckett/Projects/beckett/node_modules/playwright/index.mjs";
 import fs from "node:fs";
 
@@ -8,13 +9,9 @@ fs.mkdirSync(OUT, { recursive: true });
 
 const errors = [];
 
-async function shoot(name, viewport, reduced = false) {
+async function shoot(name, viewport) {
   const browser = await chromium.launch();
-  const ctx = await browser.newContext({
-    viewport,
-    deviceScaleFactor: 2,
-    reducedMotion: reduced ? "reduce" : "no-preference",
-  });
+  const ctx = await browser.newContext({ viewport, deviceScaleFactor: 2 });
   const page = await ctx.newPage();
   page.on("pageerror", (e) => errors.push(`${name}: ${e.message}`));
   page.on("console", (m) => {
@@ -22,22 +19,21 @@ async function shoot(name, viewport, reduced = false) {
   });
 
   await page.goto(URL, { waitUntil: "networkidle" });
-  await page.waitForTimeout(1200);
+  await page.waitForTimeout(800);
 
-  // horizontal overflow check
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
   if (overflow > 1) errors.push(`${name}: horizontal overflow ${overflow}px`);
 
   await page.screenshot({ path: `${OUT}/${name}-hero.png` });
+  await page.screenshot({ path: `${OUT}/${name}-full.png`, fullPage: true });
 
-  // walk down the page, one shot per section
   const total = await page.evaluate(() => document.body.scrollHeight);
-  const steps = Math.ceil(total / viewport.height);
-  for (let i = 1; i < Math.min(steps, 9); i++) {
+  const steps = Math.min(Math.ceil(total / viewport.height), 9);
+  for (let i = 1; i < steps; i++) {
     await page.evaluate((y) => window.scrollTo(0, y), i * viewport.height * 0.92);
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(500);
     await page.screenshot({ path: `${OUT}/${name}-${i}.png` });
   }
 
@@ -46,6 +42,6 @@ async function shoot(name, viewport, reduced = false) {
 
 await shoot("desk", { width: 1440, height: 900 });
 await shoot("phone", { width: 390, height: 844 });
-if (process.env.SHOOT_REDUCED) await shoot("still", { width: 1440, height: 900 }, true);
 
 console.log(errors.length ? errors.join("\n") : "no page errors, no overflow");
+process.exit(errors.length ? 1 : 0);
