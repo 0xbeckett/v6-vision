@@ -21,13 +21,13 @@ export function ShiftSection({ shift, demo, className }: Props) {
       aria-labelledby={`${shift.id}-title`}
       className={cn("border-t border-border scroll-mt-24", className)}
     >
-      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-24 sm:px-6 lg:grid-cols-12 lg:gap-16 lg:px-8 lg:py-40">
+      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-24 sm:px-6 lg:grid-cols-12 lg:gap-16 lg:px-8 lg:py-40">
         <div className="lg:col-span-3">
-          <div className="lg:sticky lg:top-28">
-            <div className="font-mono text-6xl leading-none font-medium tracking-tight text-primary tabular-nums lg:text-7xl">
+          <div className="flex items-baseline gap-4 lg:sticky lg:top-28 lg:block">
+            <div className="font-mono text-5xl leading-none font-medium tracking-tight text-primary tabular-nums sm:text-6xl lg:text-7xl">
               {shift.n}
             </div>
-            <p className="mt-4 font-mono text-xs tracking-widest text-muted-foreground uppercase">
+            <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase lg:mt-4">
               {shift.label}
             </p>
           </div>

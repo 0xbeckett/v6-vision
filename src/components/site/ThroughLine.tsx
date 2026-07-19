@@ -29,7 +29,7 @@ export function ThroughLine() {
           </p>
         </div>
 
-        <p className="mt-16 max-w-3xl text-2xl leading-tight font-semibold tracking-tight text-balance sm:text-3xl">
+        <p className="mt-16 max-w-3xl border-l-2 border-primary pl-6 text-2xl leading-tight font-semibold tracking-tight text-balance sm:text-3xl">
           v6 is the version that stops waiting to be asked.
         </p>
       </div>
