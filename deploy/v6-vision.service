@@ -1,0 +1,13 @@
+[Unit]
+Description=v6.0xbeckett.me static site (port 8762)
+After=network.target
+
+[Service]
+Environment=V6_ROOT=/home/beckett/sites/v6-vision
+Environment=V6_PORT=8762
+ExecStart=/usr/bin/python3 /home/beckett/sites/v6-vision/serve.py
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=default.target

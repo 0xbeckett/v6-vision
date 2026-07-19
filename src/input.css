@@ -1,0 +1,440 @@
+@import "tailwindcss";
+
+@source "../site/index.html";
+@source "../site/main.js";
+
+/* ── tokens ───────────────────────────────────────────────────────────────
+   ink / bone / one ember accent. nothing else gets a color.
+   ------------------------------------------------------------------------ */
+@theme {
+  --color-ink: #0a0a0b;
+  --color-ink-raised: #101013;
+  --color-ink-sunk: #060607;
+  --color-bone: #e8e4da;
+  --color-bone-dim: #9b968b;
+  --color-bone-faint: #55524c;
+  --color-seam: #23231f;
+  --color-ember: #e2603a;
+  --color-ember-dim: #8a3a24;
+
+  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-slab: 2px;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── base ─────────────────────────────────────────────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-bone);
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    overflow-x: hidden;
+    /* faint paper tooth so the ink isn't a flat void */
+    background-image:
+      radial-gradient(
+        ellipse 90% 55% at 50% -10%,
+        rgb(226 96 58 / 0.05),
+        transparent 70%
+      );
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: var(--color-ember);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ember);
+    outline-offset: 3px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+
+  /* the accent glyph on numerals, used once per chapter */
+  .numeral {
+    font-family: var(--font-display);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  /* ── shared editorial furniture ───────────────────────────────────── */
+
+  .rule {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      var(--color-seam),
+      color-mix(in srgb, var(--color-seam) 40%, transparent)
+    );
+  }
+
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: lowercase;
+    color: var(--color-bone-faint);
+  }
+
+  .prose-note {
+    max-width: 34rem;
+    color: var(--color-bone-dim);
+    line-height: 1.8;
+  }
+
+  .prose-note strong {
+    color: var(--color-bone);
+    font-weight: 400;
+  }
+
+  /* ── scroll reveal ────────────────────────────────────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.9s var(--ease-out-soft),
+      transform 0.9s var(--ease-out-soft);
+  }
+
+  .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal-d1 {
+    transition-delay: 80ms;
+  }
+  .reveal-d2 {
+    transition-delay: 160ms;
+  }
+  .reveal-d3 {
+    transition-delay: 240ms;
+  }
+
+  /* ── hero ─────────────────────────────────────────────────────────── */
+  #lattice {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    transition: opacity 0.6s linear;
+    /* keep the field off the wordmark and the footer rail — a stray particle
+       next to "beckett" reads as a typo */
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      black 96px,
+      black calc(100% - 96px),
+      transparent 100%
+    );
+  }
+
+  .hero-line {
+    display: block;
+    overflow: hidden;
+  }
+
+  .hero-line > span {
+    display: block;
+    transform: translateY(105%);
+    animation: line-up 1.1s var(--ease-out-soft) forwards;
+  }
+
+  @keyframes line-up {
+    to {
+      transform: none;
+    }
+  }
+
+  /* ── p1: accretion graph ──────────────────────────────────────────── */
+  .node-hit {
+    cursor: pointer;
+  }
+
+  .node-dot {
+    transition:
+      r 0.25s var(--ease-out-soft),
+      fill 0.2s ease-out;
+  }
+
+  .node-hit:hover .node-dot,
+  .node-hit:focus-visible .node-dot,
+  .node-hit[data-active="true"] .node-dot {
+    fill: var(--color-ember);
+  }
+
+  .node-ring {
+    opacity: 0;
+    transition:
+      opacity 0.25s ease-out,
+      r 0.35s var(--ease-out-soft);
+  }
+
+  .node-hit:hover .node-ring,
+  .node-hit:focus-visible .node-ring,
+  .node-hit[data-active="true"] .node-ring {
+    opacity: 1;
+  }
+
+  .edge {
+    stroke: var(--color-seam);
+    transition:
+      stroke 0.25s ease-out,
+      stroke-opacity 0.25s ease-out;
+    stroke-opacity: 0.9;
+  }
+
+  .edge[data-lit="true"] {
+    stroke: var(--color-ember-dim);
+    stroke-opacity: 1;
+  }
+
+  /* nodes accrete in, one after another */
+  .graph-in .node-hit,
+  .graph-in .edge {
+    opacity: 0;
+    animation: accrete 0.7s var(--ease-out-soft) forwards;
+    animation-delay: calc(var(--i) * 90ms);
+  }
+
+  @keyframes accrete {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* ── p2: cost strip ───────────────────────────────────────────────── */
+  .bar {
+    position: relative;
+    display: block;
+    flex: 1 1 0;
+    min-width: 0;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    align-self: flex-end;
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .bar > i {
+    display: block;
+    width: 100%;
+    background: var(--color-bone-faint);
+    height: var(--h);
+    transition:
+      height 0.8s var(--ease-out-soft),
+      background-color 0.2s ease-out;
+  }
+
+  .bar:hover > i,
+  .bar:focus-visible > i,
+  .bar[data-sel="true"] > i {
+    background: var(--color-bone);
+  }
+
+  .bar[data-outlier="true"] > i {
+    background: var(--color-ember);
+  }
+
+  .bar[data-outlier="true"]:hover > i,
+  .bar[data-outlier="true"][data-sel="true"] > i {
+    background: color-mix(in srgb, var(--color-ember) 80%, white);
+  }
+
+  /* ── p3: durability track ─────────────────────────────────────────── */
+  .track-path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-dasharray: var(--len);
+    stroke-dashoffset: calc(var(--len) - var(--len) * var(--draw, 0));
+  }
+
+  .seg-btn {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+    padding: 0.5rem 0.875rem;
+    color: var(--color-bone-faint);
+    border: 1px solid var(--color-seam);
+    background: transparent;
+    transition:
+      color 0.2s ease-out,
+      border-color 0.2s ease-out,
+      background-color 0.2s ease-out;
+    min-height: 44px;
+  }
+
+  .seg-btn:hover {
+    color: var(--color-bone-dim);
+    border-color: color-mix(in srgb, var(--color-bone-faint) 60%, transparent);
+  }
+
+  .seg-btn[aria-pressed="true"] {
+    color: var(--color-ink);
+    background: var(--color-bone);
+    border-color: var(--color-bone);
+  }
+
+  /* ── p4: the seam ─────────────────────────────────────────────────── */
+  .port {
+    cursor: pointer;
+  }
+
+  .port-wire {
+    stroke: var(--color-bone-faint);
+    stroke-opacity: 0.55;
+    stroke-width: 1;
+    stroke-dasharray: 3 5;
+    transition:
+      stroke 0.3s ease-out,
+      stroke-width 0.3s ease-out,
+      stroke-dasharray 0.4s var(--ease-out-soft);
+  }
+
+  .port[data-home="true"] .port-wire {
+    stroke: var(--color-bone-dim);
+    stroke-opacity: 1;
+    stroke-dasharray: none;
+    stroke-width: 1.25;
+  }
+
+  .port[data-on="true"] .port-wire {
+    stroke: var(--color-ember);
+    stroke-opacity: 1;
+    stroke-dasharray: none;
+    stroke-width: 1.5;
+  }
+
+  .port-label {
+    font-family: var(--font-mono);
+    letter-spacing: 0.06em;
+    fill: var(--color-bone-faint);
+    transition: fill 0.25s ease-out;
+  }
+
+  .port[data-home="true"] .port-label {
+    fill: var(--color-bone-dim);
+  }
+
+  .port[data-on="true"] .port-label {
+    fill: var(--color-ember);
+  }
+
+  .port-box {
+    fill: var(--color-ink-raised);
+    stroke: var(--color-seam);
+    transition: stroke 0.25s ease-out;
+  }
+
+  .port[data-on="true"] .port-box,
+  .port[data-home="true"] .port-box {
+    stroke: color-mix(in srgb, var(--color-bone-faint) 80%, transparent);
+  }
+
+  /* ── p5: the eye ──────────────────────────────────────────────────── */
+  .scanline {
+    transform-origin: 0 0;
+    opacity: 0;
+  }
+
+  .scanning .scanline {
+    opacity: 1;
+    animation: scan 2.6s linear forwards;
+  }
+
+  @keyframes scan {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(200px);
+    }
+  }
+
+  .verdict-line {
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+      opacity 0.35s ease-out,
+      transform 0.35s var(--ease-out-soft);
+  }
+
+  .verdict-line.is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  .wire-block {
+    fill: var(--color-seam);
+    transition: fill 0.4s ease-out;
+  }
+
+  /* scanned = read, not decorated. the ember stays on the scan line alone. */
+  .wire-block.lit {
+    fill: color-mix(in srgb, var(--color-bone-dim) 65%, var(--color-seam));
+  }
+}
+
+/* ── reduced motion: kill everything non-essential, keep the end state ─── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .hero-line > span {
+    transform: none;
+    animation: none;
+  }
+
+  .scanline {
+    display: none;
+  }
+
+  .verdict-line {
+    opacity: 1;
+    transform: none;
+  }
+}
