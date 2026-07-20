@@ -1,8 +1,9 @@
 import { ShiftSection } from "@/components/site/ShiftSection";
+import { SelfModification } from "@/components/artifacts/SelfModification";
 import { SHIFTS } from "@/content/shifts";
 
-/* shift 05. own file so branch #45.2 can pass a `demo` node here without
-   touching the other four sections. */
+/* shift 05. push a change through propose → validate → deploy, watch production
+   turn, and roll it back — with the veto in your hand the whole time. */
 export function Shift05SelfModification() {
-  return <ShiftSection shift={SHIFTS[4]} />;
+  return <ShiftSection shift={SHIFTS[4]} demo={<SelfModification />} />;
 }

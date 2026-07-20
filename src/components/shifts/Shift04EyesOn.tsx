@@ -1,8 +1,9 @@
 import { ShiftSection } from "@/components/site/ShiftSection";
+import { EyesOn } from "@/components/artifacts/EyesOn";
 import { SHIFTS } from "@/content/shifts";
 
-/* shift 04. own file so branch #45.2 can pass a `demo` node here without
-   touching the other four sections. */
+/* shift 04. run the loop and watch it close: deploy, observe, catch its own
+   regression, loop back, and come up healthy. */
 export function Shift04EyesOn() {
-  return <ShiftSection shift={SHIFTS[3]} />;
+  return <ShiftSection shift={SHIFTS[3]} demo={<EyesOn />} />;
 }
