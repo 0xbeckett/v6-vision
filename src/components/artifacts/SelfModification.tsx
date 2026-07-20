@@ -41,14 +41,15 @@ export function SelfModification() {
     vetoed: "you vetoed it — nothing shipped, it stayed put",
   };
 
-  const primary: { label: string; next: Phase; tone?: "primary" } = {
+  const primaryByPhase: Record<Phase, { label: string; next: Phase; tone?: "primary" }> = {
     stable: { label: "propose ▸", next: "proposed", tone: "primary" },
     proposed: { label: "validate ▸", next: "validated", tone: "primary" },
     validated: { label: "deploy ▸", next: "deployed", tone: "primary" },
     deployed: { label: "roll back ▸", next: "rolledback", tone: "primary" },
     rolledback: { label: "reset", next: "stable" },
     vetoed: { label: "reset", next: "stable" },
-  }[phase];
+  };
+  const primary = primaryByPhase[phase];
 
   const canVeto = phase === "proposed" || phase === "validated";
 
