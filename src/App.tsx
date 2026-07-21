@@ -2,6 +2,7 @@ import { Nav } from "@/components/site/Nav";
 import { Hero } from "@/components/site/Hero";
 import { InvocationContrast } from "@/components/site/InvocationContrast";
 import { Pillars } from "@/components/site/Pillars";
+import { EngineMesh } from "@/components/site/EngineMesh";
 import { AutonomyLoop } from "@/components/site/AutonomyLoop";
 import { Machinery } from "@/components/site/Machinery";
 import { Pricing } from "@/components/site/Pricing";
@@ -16,6 +17,7 @@ export default function App() {
         <Hero />
         <InvocationContrast />
         <Pillars />
+        <EngineMesh />
         <AutonomyLoop />
         <Machinery />
         <Pricing />

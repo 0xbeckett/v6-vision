@@ -1,7 +1,7 @@
 const LINKS = [
   { href: "#invocation", label: "the shift" },
-  { href: "#architecture", label: "architecture" },
-  { href: "#machinery", label: "machinery" },
+  { href: "#engine", label: "the engine" },
+  { href: "#architecture", label: "the loop" },
   { href: "#pricing", label: "pricing" },
 ];
 
