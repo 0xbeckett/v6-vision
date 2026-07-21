@@ -8,9 +8,9 @@ import { Reveal } from "@/components/ui/Reveal";
    pure inline SVG so it is legible, themeable, and part of the page rather
    than an image dropped on top of it. */
 
-const VB = { w: 900, h: 680 };
-const C = { x: 424, y: 388 };
-const R = 196;
+const VB = { w: 900, h: 636 };
+const C = { x: 424, y: 356 };
+const R = 194;
 const NODE = { w: 168, h: 60 };
 
 /* five nodes, evenly spaced, first one at the top (-90deg), going clockwise. */
@@ -40,7 +40,7 @@ export function AutonomyLoop() {
 
   /* dashed tether from the human node down to the decide→dispatch edge — the
      moment the loop turns a decision into action, which is what a veto gates. */
-  const human = { x: 726, y: 150 };
+  const human = { x: 726, y: 128 };
   const gate = pt(2, R);
 
   return (
@@ -96,14 +96,18 @@ export function AutonomyLoop() {
                 {/* soft core glow */}
                 <circle cx={C.x} cy={C.y} r={R - 6} fill="url(#loop-core)" />
 
-                {/* the ring the system walks */}
+                {/* the ring the system walks — a faint track plus a hair of accent */}
+                <circle cx={C.x} cy={C.y} r={R} fill="none" stroke="var(--color-border)" strokeWidth={1.5} />
                 <circle
                   cx={C.x}
                   cy={C.y}
                   r={R}
                   fill="none"
-                  stroke="var(--color-border)"
+                  stroke="var(--color-primary)"
                   strokeWidth={1.5}
+                  strokeDasharray="1 15"
+                  strokeLinecap="round"
+                  opacity={0.4}
                 />
 
                 {/* direction arrowheads at each edge midpoint */}
@@ -170,7 +174,7 @@ export function AutonomyLoop() {
                       width={NODE.w}
                       height={NODE.h}
                       rx={12}
-                      fill="var(--color-background)"
+                      fill="var(--color-muted)"
                       stroke="var(--color-border)"
                       strokeWidth={1.5}
                     />
