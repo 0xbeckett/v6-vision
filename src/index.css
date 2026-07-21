@@ -90,6 +90,29 @@
   }
 }
 
+/* hero load-in: a small settle on first paint. reveal-on-scroll (further down
+   the page) is handled by the Reveal component + IntersectionObserver. */
+@keyframes settle-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: settle-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-in {
+    animation: none;
+  }
+}
+
 /* the single decorative element on the page: a hairline grid that grounds the
    canvas without competing with the type. */
 .grid-field {
