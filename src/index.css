@@ -22,6 +22,12 @@
   --color-ring: var(--ring);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+
+  /* the engine diagram carries a second, scoped accent pair: the two flow
+     types from ro's source drawing. pink = memory + context, a bright neutral
+     = execution / task. distinct hues so the two never read as one. */
+  --color-flow-memory: var(--flow-memory);
+  --color-flow-exec: var(--flow-exec);
 }
 
 :root {
@@ -34,6 +40,8 @@
   --ring: oklch(0.72 0.13 72);
   --primary: oklch(0.62 0.14 68);
   --primary-foreground: oklch(0.99 0.003 90);
+  --flow-memory: oklch(0.6 0.22 6);
+  --flow-exec: oklch(0.32 0.01 285);
 }
 
 .dark {
@@ -46,6 +54,10 @@
   --ring: oklch(0.78 0.13 72);
   --primary: oklch(0.8 0.13 72);
   --primary-foreground: oklch(0.18 0.02 70);
+  /* dark is the shipped theme: pink hot enough to pulse, execution a cool
+     near-white so it reads as the diagram's "black" line against dark card. */
+  --flow-memory: oklch(0.72 0.19 4);
+  --flow-exec: oklch(0.87 0.008 285);
 }
 
 @layer base {
