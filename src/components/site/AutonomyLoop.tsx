@@ -68,7 +68,8 @@ export function AutonomyLoop() {
 
         <Reveal delay={120} className="mt-16">
           <figure className="overflow-hidden rounded-[var(--radius-house)] border border-border bg-card">
-            <div className="grid-field pointer-events-none relative">
+            <div className="relative">
+              <div aria-hidden className="grid-field pointer-events-none absolute inset-0" />
               <svg
                 viewBox={`0 0 ${VB.w} ${VB.h}`}
                 className="relative block h-auto w-full"
