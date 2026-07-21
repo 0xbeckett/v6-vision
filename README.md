@@ -1,21 +1,30 @@
 # v6-vision
 
-the v6 thesis, as a page. lives at [v6.0xbeckett.me](https://v6.0xbeckett.me).
+the v6 thesis, as a page. lives at [v6.0xbeckett.me](https://v6.0xbeckett.me) (also reachable at
+[v6-vision.0xbeckett.me](https://v6-vision.0xbeckett.me)).
 
-the thesis itself is in [VISION.md](./VISION.md) — the site is that document, laid out.
+**the thesis:** v6 is the autonomy overhaul — the first beckett that runs on its own clock,
+chooses its own work (free will), and judges its own quality (taste). v5 was invoked; v6 is a
+loop. you hold a veto, not a wrench. the long form is in [VISION.md](./VISION.md).
 
 ## structure
 
 ```
-src/content/shifts.ts        the five shifts, as data. all copy lives here.
-src/components/site/         hero, nav, the shared ShiftSection shell, through-line, footer
-src/components/shifts/       one component per shift — Shift01… through Shift05…
-src/index.css                the token layer (zinc ramp + one ochre accent, dark by default)
+src/content/autonomy.ts      the thesis, as data: hero copy, the three pillars, the loop
+                             stages, and the pricing tiers. all new copy lives here.
+src/content/shifts.ts        the five shifts, reframed as the machinery of the loop.
+src/components/site/         nav, hero, the invocation contrast (v5 line / v6 loop),
+                             pillars, the AutonomyLoop architecture diagram, machinery,
+                             pricing, through-line, footer.
+src/components/ui/Reveal.tsx reveal-on-scroll wrapper (IntersectionObserver + a fade).
+src/lib/motion.ts            useInView + usePrefersReducedMotion.
+src/index.css                the token layer (zinc ramp + one ochre accent, dark by default).
 ```
 
-each of the five shifts is its own component so an interactive layer can be added to one
-without touching the other four. `ShiftSection` takes an optional `demo` node — that is the
-slot the demos go in.
+the architecture diagram (`AutonomyLoop.tsx`) and the two mini-diagrams in `InvocationContrast.tsx`
+are hand-rolled inline SVG — animated via SMIL, gated on `prefers-reduced-motion`, drawn against
+the same tokens as everything else so they theme and stay legible in dark mode. the five loop
+stages line up one-to-one with the five shifts on purpose.
 
 ## build + deploy
 
